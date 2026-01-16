@@ -12,7 +12,7 @@ function App() {
     if (a === false) {
       return
     }
-      setUsers(users.filter(user => user.id != event.target.value))
+      setUsers(users.filter(user => Number(user.id) !== Number(event.target.value)))
    }
 
   const handleChangeUsername = event => {
@@ -49,12 +49,9 @@ function App() {
       alert('Заполните email')
       return
     }
-    let cleanUsername = document.getElementById('username')
-    let cleanEmail = document.getElementById('email')
-    let cleanRole = document.getElementById('selectRole')
-    cleanUsername.value = ''
-    cleanEmail.value = ''
-    cleanRole.value = ''
+    setUsername('')
+    setEmail('')
+    setRole('user')
     let id = Math.ceil(Math.random() * 2000)
     setUsers(oldUsers => [...oldUsers, {
       username: username,
@@ -96,23 +93,23 @@ function App() {
         </table>
       </header>
       <h2>Добавить пользователя</h2>
-      <div class="input-group mb-3">
-      <div class="input-group-prepend">
-          <span class="input-group-text" id="basic-addon1">@</span>
+      <div className="input-group mb-3">
+      <div className="input-group-prepend">
+          <span className="input-group-text" id="basic-addon1">@</span>
       </div>
-          <input onChange={handleChangeUsername} required type="text" id='username' class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1"></input>
+          <input value={username} onChange={handleChangeUsername} required type="text" id='username' className="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1"></input>
     </div>
-    <div class="input-group mb-3">
-      <div class="input-group-prepend">
-          <span class="input-group-text" id="basic-addon1">@</span>
+    <div className="input-group mb-3">
+      <div className="input-group-prepend">
+          <span className="input-group-text" id="basic-addon1">@</span>
       </div>
-          <input onChange={handleChangeEmail} id='email' required type="text" class="form-control email" placeholder="Email" aria-label="Email" aria-describedby="basic-addon1"></input>
+          <input value={email} onChange={handleChangeEmail} id='email' required type="text" className="form-control email" placeholder="Email" aria-label="Email" aria-describedby="basic-addon1"></input>
     </div>
       <select id='selectRole' onChange={handleChangeRole} className='form-select'>
         <option value="user">User</option>
         <option value="admin">Admin</option>
       </select>
-      <button onClick={addUser} type="submit" class="btn btn-primary btn-lg mt-2">Добавить пользователя</button>
+      <button onClick={addUser} type="submit" className="btn btn-primary btn-lg mt-2">Добавить пользователя</button>
     </div>
     
   );
