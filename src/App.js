@@ -28,17 +28,12 @@ function App() {
   const addUser = event => {
     let oldUsers = users
     let result = false
-    for (let a = 0; a < email.length; a++) {
-      if (email[a] === '@') {
-        result = true
-      }
+    if (!email.includes('@')) {
+      alert('Email должен содеражать @')
+      return
     }
     if (username.length > 15) {
       alert('Username не может быть таким длинным!')
-      return
-    }
-    if (result === false) {
-      alert('Email должен содержать @')
       return
     }
     if (username === '') {
@@ -52,8 +47,8 @@ function App() {
     setUsername('')
     setEmail('')
     setRole('user')
-    let id = Math.ceil(Math.random() * 2000)
-    setUsers(oldUsers => [...oldUsers, {
+    let id = Date.now()
+    setUsers([...users, {
       username: username,
       email: email,
       role: role,
@@ -74,21 +69,16 @@ function App() {
           </tr>
           </thead>
           <tbody>
-              {(() => {
-                let users2 = []
-                for (let a = 0; a < users.length; a++) {
-                  users2.push(
+                   {users.map((user, a) => (
                     <tr key={a}>
-                  <td><h2>{users[a].id}</h2></td>
-                  <td><h2>{users[a].username}</h2></td>
-                  <td><h2>{users[a].email}</h2></td>
-                  <td><h2>{users[a].role}</h2></td>
-                  <td className='text-center'><button value={users[a].id} onClick={deleteUser} className='btn btn-danger btn-lg'>Удалить</button></td>
+                          <td><h2>{users[a].id}</h2></td>
+                          <td><h2>{users[a].username}</h2></td>
+                          <td><h2>{users[a].email}</h2></td>
+                          <td><h2>{users[a].role}</h2></td>
+                          <td className='text-center'><button value={users[a].id} onClick={deleteUser} className='btn btn-danger btn-lg'>Удалить</button></td>
                     </tr>
-                  );
-                }
-                return users2;
-              })()}            
+                   ))}
+        
           </tbody>
         </table>
       </header>
