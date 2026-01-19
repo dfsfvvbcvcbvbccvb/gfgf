@@ -1,5 +1,6 @@
 import './App.css';
 import { useState } from 'react';
+import UserRow from './UserRow';
 
 function App() {
   const [username, setUsername] = useState('')
@@ -7,12 +8,8 @@ function App() {
   const [role, setRole] = useState('user')
   const [users, setUsers] = useState([])
 
-  const deleteUser = event => {
-    let a = window.confirm('Вы уверены что хотите удалить пользователя?')
-    if (a === false) {
-      return
-    }
-      setUsers(users.filter(user => Number(user.id) !== Number(event.target.value)))
+  const deleteUser = userId => {
+      setUsers(users.filter(user => Number(user.id) !== Number(userId)))
    }
 
   const handleChangeUsername = event => {
@@ -25,23 +22,27 @@ function App() {
     setRole(event.target.value)
   }
 
-  const addUser = event => {
-    let oldUsers = users
-    let result = false
-    if (!email.includes('@')) {
-      alert('Email должен содеражать @')
-      return
+  function validateUser(username, email) {
+    if (username.trim() === '') {
+      return 'Заполните username'
     }
     if (username.length > 15) {
-      alert('Username не может быть таким длинным!')
-      return
+      return 'Username не может быть таким длинным'
     }
-    if (username === '') {
-      alert('Заполните username')
-      return
+    if (email.trim() === '') {
+      return 'Заполните email'
     }
-    if (email === '') {
-      alert('Заполните email')
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      return 'Email должен содержать @ и домен'
+    }
+    return null
+  }
+
+  const addUser = event => {
+    const error = validateUser(username, email)
+    if (error) {
+      alert(error)
       return
     }
     setUsername('')
@@ -70,13 +71,11 @@ function App() {
           </thead>
           <tbody>
                    {users.map((user, a) => (
-                    <tr key={a}>
-                          <td><h2>{users[a].id}</h2></td>
-                          <td><h2>{users[a].username}</h2></td>
-                          <td><h2>{users[a].email}</h2></td>
-                          <td><h2>{users[a].role}</h2></td>
-                          <td className='text-center'><button value={users[a].id} onClick={deleteUser} className='btn btn-danger btn-lg'>Удалить</button></td>
-                    </tr>
+                    <UserRow
+                      key={user.id}
+                      user={user}
+                      onDelete={deleteUser}
+                    />
                    ))}
         
           </tbody>
